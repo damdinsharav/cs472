@@ -130,7 +130,8 @@ window.onload = function () {
                         })
                             .then(response => {
                                 if (response.ok) {
-                                    console.log('PUT request succeeded');
+                                    console.log('POST request succeeded');
+                                    alert('Purchase succeeded')
                                     location.reload()
                                 } else {
                                     throw new Error('POST request failed');
@@ -239,6 +240,8 @@ window.onload = function () {
                                         .catch(error => {
                                             console.error('Error:', error.message);
                                         });
+                                } else {
+                                    alert('No more quantity available!')
                                 }
                             });
 
@@ -285,6 +288,8 @@ window.onload = function () {
                     if (response.ok) {
                         return response.json();
                     } else {
+                        console.log(response)
+                        alert("Wrong username or password")
                         throw new Error('Error: ' + response.status);
                     }
                 })
