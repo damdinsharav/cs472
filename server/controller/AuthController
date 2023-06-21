@@ -1,0 +1,24 @@
+const jwt = require('jsonwebtoken')
+
+const { users } = require('../db')
+
+exports.authenticateToken = (req, res, next) => {
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+    if (token == null) return res.status(401).send({ error: 'no token' });
+    jwt.verify(token, 'mysecret', (err, user) => {
+        if (err) return res.status(401).send({ error: 'token verification failed' });
+        req.user = user
+        next()
+    })
+}
+
+exports.login = (req, res) => {
+    const user = users.find(user => user.username === req.body.username && user.password === req.body.password)
+    if (user) {
+        const accessToken = jwt.sign(user, 'mysecret')
+        res.json({ accessToken: accessToken })
+    } else {
+        res.status(401).send({ error: 'Wrong username or password' });
+    }
+}
